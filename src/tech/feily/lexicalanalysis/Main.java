@@ -1,6 +1,6 @@
 package tech.feily.lexicalanalysis;
 
-public class DFATest {
+public class Main {
 
     public static void main(String[] args) {
         Integer[][][] nfaTable = {
