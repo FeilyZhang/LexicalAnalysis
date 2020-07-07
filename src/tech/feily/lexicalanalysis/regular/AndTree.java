@@ -9,14 +9,19 @@ package tech.feily.lexicalanalysis.regular;
  */
 public class AndTree implements Tree {
 
-    private TreeNode head;
-    private TreeNode tail;
-
+    private TreeNode head = new TreeNode();
+    private TreeNode tail = new TreeNode();;
+    
     public AndTree(Tree left, Tree right) {
-        this.tail = new TreeNode(-1, null, null, null, null);
-        left.setTail(right.getHead());
         this.head = left.getHead();
-        this.tail = left.getTail();
+        TreeNode node = left.getTail();
+        node.setLeftNode(right.getHead().getLeftNode());
+        node.setLeftRel(right.getHead().getLeftRel());
+        node.setRightNode(right.getHead().getRightNode());
+        node.setRightRel(right.getHead().getRightRel());
+        node.setVal(right.getHead().getVal());
+        left.setTail(node);
+        this.tail = right.getTail();
     }
 
     @Override
@@ -37,7 +42,7 @@ public class AndTree implements Tree {
 
     @Override
     public String toString() {
-        return "[OrTree]-head = " + head.toString() + ", tail = " + tail.toString();
+        return "{[AndTree]-head = " + head.toString() + ", tail = " + tail.toString() + "}";
     }
     
 }

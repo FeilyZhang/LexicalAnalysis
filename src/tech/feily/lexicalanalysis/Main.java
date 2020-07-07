@@ -10,6 +10,7 @@ import java.util.Map;
 
 import tech.feily.lexicalanalysis.regular.RegularExp;
 import tech.feily.lexicalanalysis.regular.SubExp;
+import tech.feily.lexicalanalysis.regular.TreeNode;
 
 public class Main {
     static int i = 0, j = 0;
@@ -30,14 +31,21 @@ public class Main {
         DFAHolder holder = new NFA(nfaTable, inputChars, inputChars[0]).toDFA();
         System.out.println(holder.getRst().toString());
         System.out.println("".length());*/
-        getSubExp("((a|b)a(a|(b|a)))(((a)))");
-        List<SubExp> ret = getSubExp("aaasd(ss)");
-        for (SubExp s : ret) {
-            System.out.println(s.toString());
-        }
+        //getSubExp("((a|b)a(a|(b|a)))(((a)))");
+        //List<SubExp> ret = getSubExp("((a|b)a(a|(b|a)))(((a)))");
+        /*
+        String rst;
+        while ((rst = getSubstr(ret.get(ret.size() - 1), ret)) != null) {
+            System.out.println(rst);
+        }*/
+        //for (SubExp s : ret) {
+          //  System.out.println(s.toString());
+        //}
+        char[] inputChars = {'¦Å', 'a', 'b'};//((a|(a|b))(ab))
+        System.out.println(new RegularExp("((b|a)a|(ab))", inputChars).buildTree().toString());
     }
 
-
+//subExp.getFrom()
     public static String getSubstr(SubExp subExp, List<SubExp> subExps) {
         List<SubExp> copys = new LinkedList<>();
         copys.addAll(subExps);

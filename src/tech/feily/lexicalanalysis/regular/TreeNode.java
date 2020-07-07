@@ -7,13 +7,17 @@ package tech.feily.lexicalanalysis.regular;
  */
 public class TreeNode {
 
-    private Integer val;
+    private String val;
     private Character leftRel;
     private Character rightRel;
     private TreeNode leftNode;
     private TreeNode rightNode;
     
-    public TreeNode(Integer val, 
+    public TreeNode() {
+        
+    }
+    
+    public TreeNode(String val, 
             Character leftRel, Character rightRel,
             TreeNode leftNode, TreeNode rightNode) {
         this.val = val;
@@ -23,10 +27,10 @@ public class TreeNode {
         this.rightNode = rightNode;
     }
     
-    public Integer getVal() {
+    public String getVal() {
         return val;
     }
-    public void setVal(Integer val) {
+    public void setVal(String val) {
         this.val = val;
     }
     
@@ -60,8 +64,10 @@ public class TreeNode {
     
     @Override
     public String toString() {
-        return "val = " + val + ", leftRel = " + leftRel + ", rightRel = " + rightRel + 
-                ", leftNode = " + leftNode.toString() + ", rightNode = " + rightNode.toString();
+        String ls = leftNode != null ? leftNode.toString() : "nil";
+        String rs = rightNode != null ? rightNode.toString() : "nil";
+        return "{[TreeNode]-val = " + val + ", leftRel = " + leftRel + ", rightRel = " + rightRel + 
+                ", leftNode = " + ls + ", rightNode = " + rs + "}";
     }
     
 }

@@ -1,15 +1,19 @@
 package tech.feily.lexicalanalysis.regular;
 
+import java.util.Date;
+
 public class OrTree implements Tree {
     
     private TreeNode head;
     private TreeNode tail;
 
     public OrTree(Tree left, Tree right) {
-        this.tail = new TreeNode(-1, null, null, null, null);
-        left.setTail(this.tail);
-        right.setTail(this.tail);
-        this.head = new TreeNode(0, '¦Å', '¦Å', left.getHead(), right.getHead());
+        this.tail = new TreeNode(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()), null, null, null, null);
+        left.getTail().setLeftRel('¦Å');
+        left.getTail().setLeftNode(this.tail);
+        right.getTail().setRightRel('¦Å');
+        right.getTail().setLeftNode(this.tail);
+        this.head = new TreeNode(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()), '¦Å', '¦Å', left.getHead(), right.getHead());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package tech.feily.lexicalanalysis.regular;
 
+import java.util.Date;
+
 public class ClosureTree implements Tree {
 
     private TreeNode head;
@@ -10,8 +12,8 @@ public class ClosureTree implements Tree {
         this.tail = node;
     }
     public ClosureTree(Tree right) {
-        this.tail = new TreeNode(-1, null, null, null, null);
-        this.head = new TreeNode(-1, '¦Å', '¦Å', this.tail, right.getHead());
+        this.tail = new TreeNode(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()), null, null, null, null);
+        this.head = new TreeNode(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()), '¦Å', '¦Å', this.tail, right.getHead());
         right.getTail().setLeftNode(this.tail);
         right.getTail().setLeftRel('¦Å');
         right.getTail().setRightNode(right.getHead());

@@ -1,5 +1,7 @@
 package tech.feily.lexicalanalysis.regular;
 
+import java.util.Date;
+
 /**
  * 
  * @author FeilyZhang
@@ -14,8 +16,8 @@ public class CharTree implements Tree {
         
     }
     public CharTree(Character c) {
-        this.tail = new TreeNode(-1, null, null, null, null);
-        this.head = new TreeNode(0, c, null, this.tail, null);
+        this.tail = new TreeNode(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()), null, null, null, null);
+        this.head = new TreeNode(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()), c, null, this.tail, null);
     }
 
     @Override

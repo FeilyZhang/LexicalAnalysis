@@ -15,4 +15,6 @@ public interface Tree {
     public abstract void setTail(TreeNode tail);
     public abstract TreeNode getTail();
     
+    public abstract String toString();
+    
 }
