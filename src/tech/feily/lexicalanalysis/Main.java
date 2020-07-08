@@ -42,7 +42,7 @@ public class Main {
           //  System.out.println(s.toString());
         //}
         char[] inputChars = {'¦Å', 'a', 'b'};//((a|(a|b))(ab))
-        System.out.println(new RegularExp("((b|a)a|(ab))", inputChars).buildTree().toString());
+        System.out.println(new RegularExp("(a|b)*ab", inputChars).buildTree().toString());
     }
 
 //subExp.getFrom()

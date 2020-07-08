@@ -14,10 +14,16 @@ public class ClosureTree implements Tree {
     public ClosureTree(Tree right) {
         this.tail = new TreeNode(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()), null, null, null, null);
         this.head = new TreeNode(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()), '¦Å', '¦Å', this.tail, right.getHead());
+        TreeNode node = right.getTail();
+        node.setLeftNode(this.tail);
+        node.setLeftRel('¦Å');
+        node.setRightNode(right.getHead());
+        node.setRightRel('¦Å');
+        right.setTail(node);/*
         right.getTail().setLeftNode(this.tail);
         right.getTail().setLeftRel('¦Å');
         right.getTail().setRightNode(right.getHead());
-        right.getTail().setRightRel('¦Å');
+        right.getTail().setRightRel('¦Å');*/
     }
 
     @Override
