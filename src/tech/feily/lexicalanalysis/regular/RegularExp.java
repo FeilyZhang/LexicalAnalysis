@@ -20,6 +20,51 @@ public class RegularExp {
     }
     
     public Tree buildTree() throws ClassNotFoundException, IOException {
+        Map<String, Tree> ard = new HashMap<>();
+        ard.putAll(initializeCharTree(inputChars));
+        List<SubExp> ret = getSubExp(pattern);
+        for (SubExp r : ret) {
+            Tree treeTemp = null;
+            String all = "", part = "";
+            boolean isor = false, isini = false;System.out.println(r.toString());
+            while ((part = getSubstr(r, ret, ret.get(ret.size() - 1))) != null) {
+                if (part.equals("(")) {
+                    all += part;
+                } else if (part.equals(")")) {
+                    all += part;
+                } else if (part.equals("|")) {
+                    isor = true;
+                    all += part;
+                } else if (part.equals("*")) {
+                    treeTemp = new ClosureTree(treeTemp);
+                    all += part;
+                } else if (part.length() == 1 && !isini) {
+                    treeTemp = ard.get(part).deepClone();
+                    isini = true;
+                    all += part;
+                } else if (part.length() > 1 && !isini) {
+                    treeTemp = ard.get(part).deepClone();
+                    isini = true;
+                    all += part;
+                } else if (isor) {
+                    treeTemp = new OrTree(treeTemp, ard.get(part).deepClone());
+                    isor = false;
+                    all += part;
+                } else {System.out.println("111treeTemp = " + treeTemp);System.out.println("111part = " + ard.get(part));
+                
+                    treeTemp = new AndTree(treeTemp, ard.get(part).deepClone());
+                    all += part;
+                }
+            }
+            ard.put(all, treeTemp);
+        }
+        for (String s : ard.keySet()) {
+            System.out.println(s + " = " + ard.get(s).toString());
+        }
+        return ard.get(pattern);
+    }
+    /*
+    public Tree buildTree(boolean s) throws ClassNotFoundException, IOException {
         boolean isOr = false;
         boolean isClosure = false;
         boolean isInitial = false;
@@ -64,7 +109,7 @@ public class RegularExp {
                     }/* else if (isClosure) {
                         tempTree = new ClosureTree(st.get(temp).deepClone());System.out.println(tempTree.toString());
                         isClosure = false;
-                    }*/else if (temp.length() > 1 && !isInitial) {
+                    }*//*else if (temp.length() > 1 && !isInitial) {
                         tempTree = st.get(temp);System.out.println(tempTree.toString());
                         isInitial = true;
                     } else {
@@ -82,8 +127,8 @@ public class RegularExp {
         for (String s : st.keySet()) {
             System.out.println(s + " = " + st.get(s));
         }
-        return st.get(pattern);
-    }
+        return st.get(pattern);*/
+    //}
 
     public String getSubstr(SubExp subExp, List<SubExp> subExps, SubExp pattern) {
         /*
