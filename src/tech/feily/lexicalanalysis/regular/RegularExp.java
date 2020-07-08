@@ -1,5 +1,6 @@
 package tech.feily.lexicalanalysis.regular;
 
+import java.io.IOException;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,7 +19,7 @@ public class RegularExp {
         this.inputChars = inputChars;
     }
     
-    public Tree buildTree() {
+    public Tree buildTree() throws ClassNotFoundException, IOException {
         boolean isOr = false;
         boolean isClosure = false;
         boolean isInitial = false;
@@ -47,27 +48,28 @@ public class RegularExp {
                     isOr = true;
                     mark += temp;
                 } else if (temp.equals("*")) {
-                    isClosure = true;
+                    tempTree = new ClosureTree(st.get(mark).deepClone());System.out.println(tempTree.toString());
+                    //isClosure = true;
                     mark += temp;
                 } else {
                     if (temp.length() == 1 && !isInitial) {
-                        tempTree = st.get(temp);System.out.println(tempTree.toString());
+                        tempTree = st.get(temp).deepClone();System.out.println(tempTree.toString());
                         isInitial = true;
                     } else if (temp.length() > 1 && !isInitial) {
-                        tempTree = st.get(temp);System.out.println(tempTree.toString());
+                        tempTree = st.get(temp).deepClone();System.out.println(tempTree.toString());
                         isInitial = true;
                     } else if (isOr) {
-                        tempTree = new OrTree(tempTree, st.get(temp));System.out.println(tempTree.toString());
+                        tempTree = new OrTree(tempTree, st.get(temp).deepClone());System.out.println(tempTree.toString());
                         isOr = false;
-                    } else if (isClosure) {
-                        tempTree = new ClosureTree(st.get(temp));System.out.println(tempTree.toString());
+                    }/* else if (isClosure) {
+                        tempTree = new ClosureTree(st.get(temp).deepClone());System.out.println(tempTree.toString());
                         isClosure = false;
-                    } /*else if (temp.length() > 1 && !isInitial) {
+                    }*/else if (temp.length() > 1 && !isInitial) {
                         tempTree = st.get(temp);System.out.println(tempTree.toString());
                         isInitial = true;
-                    }*/ else {
+                    } else {
                         System.out.println("(ab)" + st.get("(ab)"));
-                        tempTree = new AndTree(tempTree, st.get(temp));System.out.println(tempTree.toString());
+                        tempTree = new AndTree(tempTree, st.get(temp).deepClone());System.out.println(tempTree.toString());
                     }
                     mark += temp;
                     System.out.println(mark);

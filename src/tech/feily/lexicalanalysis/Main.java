@@ -1,5 +1,6 @@
 package tech.feily.lexicalanalysis;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
@@ -14,7 +15,7 @@ import tech.feily.lexicalanalysis.regular.TreeNode;
 
 public class Main {
     static int i = 0, j = 0;
-    public static void main(String[] args) {/*
+    public static void main(String[] args) throws ClassNotFoundException, IOException {/*
         Integer[][][] nfaTable = {
                 {{1, 7}, {}, {}},
                 {{2, 4}, {}, {}},

@@ -3,12 +3,23 @@
  */
 package tech.feily.lexicalanalysis.regular;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 /**
  * @author FeilyZhang
  *
  */
-public class AndTree implements Tree {
+public class AndTree implements Tree, Serializable, Cloneable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1625571569180509074L;
     private TreeNode head = new TreeNode();
     private TreeNode tail = new TreeNode();;
     
@@ -40,6 +51,18 @@ public class AndTree implements Tree {
         this.tail = tail;
     }
 
+    @Override
+    public AndTree clone() throws CloneNotSupportedException {
+        return (AndTree) super.clone();
+    }
+    public AndTree deepClone() throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        objectOutputStream.writeObject(this);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+        return (AndTree)objectInputStream.readObject();
+    }
     @Override
     public String toString() {
         return "{[AndTree]-head = " + head.toString() + ", tail = " + tail.toString() + "}";
