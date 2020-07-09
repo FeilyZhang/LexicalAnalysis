@@ -1,4 +1,4 @@
-package tech.feily.lexicalanalysis;
+package tech.feily.lexicalanalysis.nfa;
 
 import java.util.Deque;
 import java.util.HashMap;

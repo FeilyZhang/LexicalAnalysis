@@ -1,4 +1,4 @@
-package tech.feily.lexicalanalysis;
+package tech.feily.lexicalanalysis.nfa;
 
 import java.io.IOException;
 import java.util.Deque;
