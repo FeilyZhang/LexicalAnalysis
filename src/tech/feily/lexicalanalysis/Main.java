@@ -1,17 +1,12 @@
 package tech.feily.lexicalanalysis;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import tech.feily.lexicalanalysis.regular.RegularExp;
 import tech.feily.lexicalanalysis.regular.SubExp;
-import tech.feily.lexicalanalysis.regular.TreeNode;
 
 public class Main {
     static int i = 0, j = 0;
@@ -43,7 +38,7 @@ public class Main {
           //  System.out.println(s.toString());
         //}
         char[] inputChars = {'¦Å', 'a', 'b'};//((a|(a|b))(ab))
-        System.out.println(new RegularExp("(a|b)*a", inputChars).buildTree().toString());
+        System.out.println(new RegularExp("(a|b)*ab", inputChars).buildTree().toString());
     }
 
 //subExp.getFrom()

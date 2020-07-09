@@ -1,16 +1,23 @@
 package tech.feily.lexicalanalysis.regular;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Constructing NFA from regular expression.
+ * 
+ * @author FeilyZhang
+ * @since 1.0.1
+ * @version 1.0.1
+ */
 public class RegularExp {
 
     private int i = 0, j = 0;
-    private boolean flag = false;
     private String pattern;
     private char[] inputChars;
     
@@ -26,7 +33,7 @@ public class RegularExp {
         for (SubExp r : ret) {
             Tree treeTemp = null;
             String all = "", part = "";
-            boolean isor = false, isini = false;System.out.println(r.toString());
+            boolean isor = false, isini = false;
             while ((part = getSubstr(r, ret, ret.get(ret.size() - 1))) != null) {
                 if (part.equals("(")) {
                     all += part;
@@ -39,143 +46,51 @@ public class RegularExp {
                     treeTemp = new ClosureTree(treeTemp);
                     all += part;
                 } else if (part.length() == 1 && !isini) {
-                    treeTemp = ard.get(part).deepClone();
+                    treeTemp = depthFirst(ard.get(part).deepClone());
                     isini = true;
                     all += part;
                 } else if (part.length() > 1 && !isini) {
-                    treeTemp = ard.get(part).deepClone();
+                    treeTemp = depthFirst(ard.get(part).deepClone());
                     isini = true;
                     all += part;
                 } else if (isor) {
-                    treeTemp = new OrTree(treeTemp, ard.get(part).deepClone());
+                    treeTemp = new OrTree(treeTemp, depthFirst(ard.get(part).deepClone()));
                     isor = false;
                     all += part;
-                } else {System.out.println("111treeTemp = " + treeTemp);System.out.println("111part = " + ard.get(part));
-                
-                    treeTemp = new AndTree(treeTemp, ard.get(part).deepClone());
+                } else {
+                    treeTemp = new AndTree(treeTemp, depthFirst(ard.get(part).deepClone()));
                     all += part;
                 }
             }
             ard.put(all, treeTemp);
         }
-        for (String s : ard.keySet()) {
-            System.out.println(s + " = " + ard.get(s).toString());
-        }
         return ard.get(pattern);
     }
-    /*
-    public Tree buildTree(boolean s) throws ClassNotFoundException, IOException {
-        boolean isOr = false;
-        boolean isClosure = false;
-        boolean isInitial = false;
-        String mark = "";
-        Map<String, Tree> st = new HashMap<>();
-        Deque<String> stack = new LinkedList<>();
-        st.putAll(initializeCharTree(inputChars));
-        List<SubExp> ret = getSubExp(pattern);
-        for (SubExp s : ret) {
-            System.out.println(s.getSubExp() + " " + s.getFrom() + " " + s.getTo());
-        }
-        System.out.println(ret.toString());
-        for (SubExp r : ret) {
-            String temp;
-            Tree tempTree = null;System.out.println("all = " + r.getSubExp());
-            while ((temp = getSubstr(r, ret, ret.get(ret.size() - 1))) != null) {
-                System.out.println("next = " + temp);
-                if (temp.equals("(")) {
-                    stack.push(temp);System.out.println(" stack   " + stack.toString());
-                } else if (temp.equals(")")) {
-                    System.out.println("mark1 = " + mark + temp);
-                    mark = stack.pop() + mark + temp;
-                    System.out.println("mark = " + mark);
-                    st.put(mark, tempTree);
-                } else if (temp.equals("|")) {
-                    isOr = true;
-                    mark += temp;
-                } else if (temp.equals("*")) {
-                    tempTree = new ClosureTree(st.get(mark).deepClone());System.out.println(tempTree.toString());
-                    //isClosure = true;
-                    mark += temp;
-                } else {
-                    if (temp.length() == 1 && !isInitial) {
-                        tempTree = st.get(temp).deepClone();System.out.println(tempTree.toString());
-                        isInitial = true;
-                    } else if (temp.length() > 1 && !isInitial) {
-                        tempTree = st.get(temp).deepClone();System.out.println(tempTree.toString());
-                        isInitial = true;
-                    } else if (isOr) {
-                        tempTree = new OrTree(tempTree, st.get(temp).deepClone());System.out.println(tempTree.toString());
-                        isOr = false;
-                    }/* else if (isClosure) {
-                        tempTree = new ClosureTree(st.get(temp).deepClone());System.out.println(tempTree.toString());
-                        isClosure = false;
-                    }*//*else if (temp.length() > 1 && !isInitial) {
-                        tempTree = st.get(temp);System.out.println(tempTree.toString());
-                        isInitial = true;
-                    } else {
-                        System.out.println("(ab)" + st.get("(ab)"));
-                        tempTree = new AndTree(tempTree, st.get(temp).deepClone());System.out.println(tempTree.toString());
-                    }
-                    mark += temp;
-                    System.out.println(mark);
-                }
-            }
-            mark = "";
-            isInitial = false;
-            st.put(r.getSubExp(), tempTree);
-        }
-        for (String s : st.keySet()) {
-            System.out.println(s + " = " + st.get(s));
-        }
-        return st.get(pattern);*/
-    //}
 
-    public String getSubstr(SubExp subExp, List<SubExp> subExps, SubExp pattern) {
-        /*
-        if (subExps.size() == 1) {
-            while (i < subExp.getSubExp().length()) {
-                return String.valueOf(subExp.getSubExp().charAt(i++));
+    private Tree depthFirst(Tree tree) {
+        TreeNode root = tree.getHead();
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(root);;
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            node.setVal(String.valueOf(new Date().getTime()) + String.valueOf(Math.random()));
+            if (node.getLeftNode() != null) {
+                stack.push(node.getLeftNode());
             }
-        } else if (subExps.size() == 2) {
-            while (i < subExps.get(0).getSubExp().length() && !flag) {
-                flag = true;System.out.println("enter");
-                return String.valueOf(subExp.getSubExp().charAt(i++));
+            if (node.getRightNode() != null) {
+                stack.push(node.getRightNode());
             }
-        } else {
-            List<SubExp> copys = new LinkedList<>();
-            copys.addAll(subExps);
-            copys.remove(subExp);
-            while (i != subExp.getTo() - subExp.getFrom() + 1) {
-                while (j != copys.size()) {
-                    if (i == copys.get(j).getFrom()) {
-                        i += copys.get(j).getTo() - copys.get(j).getFrom() + 1;
-                        return copys.get(j).getSubExp();
-                    } else j++;
-                }
-                j = 0;
-                return String.valueOf(subExp.getSubExp().charAt(i++));
-            }/*
-            while (i != subExp.getTo() - subExp.getFrom() + 1) {
-                while ( j != copys.size() - 1) {
-                    if (i + subExp.getFrom() == copys.get(j).getFrom()) {
-                        i += copys.get(j).getTo() - copys.get(j).getFrom() + 1;
-                        return copys.get(j).getSubExp();
-                    } else j++;
-                }
-                j = 0;
-                return String.valueOf(subExp.getSubExp().charAt(i++));
-            }*/
-        /*}
-        i = 0;
-        flag = false;
-        return null;*/
+        }
+        return tree;
+    }
+    
+    private String getSubstr(SubExp subExp, List<SubExp> subExps, SubExp pattern) {
         List<SubExp> copys = new LinkedList<>();
         copys.addAll(subExps);
         copys.remove(subExp);
         copys.remove(pattern);
         while (i != subExp.getTo() - subExp.getFrom() + 1) {
             while (j != copys.size()) {
-                //System.out.println(copys.toString());
                 if (i + subExp.getFrom() == copys.get(j).getFrom()) {
                     i += copys.get(j).getTo() - copys.get(j).getFrom() + 1;
                     String ret = copys.get(j).getSubExp();
@@ -190,7 +105,7 @@ public class RegularExp {
         return null;
     }
     
-    public List<SubExp> getSubExp(String exp) {
+    private List<SubExp> getSubExp(String exp) {
         int index = 0;
         List<SubExp> subExp = new LinkedList<>();
         Deque<Integer> stack = new LinkedList<>();
@@ -207,7 +122,7 @@ public class RegularExp {
         return subExp;
     }
     
-    public void addEleToList(SubExp exp, List<SubExp> list) {
+    private void addEleToList(SubExp exp, List<SubExp> list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getSubExp().equals(exp.getSubExp())) {
                 return;
