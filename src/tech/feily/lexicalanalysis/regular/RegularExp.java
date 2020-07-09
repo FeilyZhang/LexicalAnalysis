@@ -26,6 +26,13 @@ public class RegularExp {
         this.inputChars = inputChars;
     }
     
+    /**
+     * Conversion from regular expression to NFA. The essence is to build a tree.
+     * 
+     * @return final NFA tree.
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
     public Tree buildTree() throws ClassNotFoundException, IOException {
         Map<String, Tree> ard = new HashMap<>();
         ard.putAll(initializeCharTree(inputChars));
@@ -67,6 +74,12 @@ public class RegularExp {
         return ard.get(pattern);
     }
 
+    /**
+     * Depth first traversal algorithm is used to modify the state value of tree nodes.
+     * 
+     * @param tree - trees that need to change node state
+     * @return tree after changing node state.
+     */
     private Tree depthFirst(Tree tree) {
         TreeNode root = tree.getHead();
         Deque<TreeNode> stack = new LinkedList<>();
@@ -84,6 +97,14 @@ public class RegularExp {
         return tree;
     }
     
+    /**
+     * Gets the character or string of the specified subexpression from the list.
+     * 
+     * @param subExp - the specified subexpression
+     * @param subExps - contains a list of all subexpression
+     * @param pattern - complete regular expression
+     * @return the character or string.
+     */
     private String getSubstr(SubExp subExp, List<SubExp> subExps, SubExp pattern) {
         List<SubExp> copys = new LinkedList<>();
         copys.addAll(subExps);
@@ -105,6 +126,12 @@ public class RegularExp {
         return null;
     }
     
+    /**
+     * Gets the subexpression of the regular expression from the bottom up.
+     * 
+     * @param exp - a regular expression
+     * @return contains a list of subexpressions.
+     */
     private List<SubExp> getSubExp(String exp) {
         int index = 0;
         List<SubExp> subExp = new LinkedList<>();
@@ -122,6 +149,12 @@ public class RegularExp {
         return subExp;
     }
     
+    /**
+     * This method adds elements to the list without repetition.
+     * 
+     * @param exp - an element of type SubExp
+     * @param list Modified list.
+     */
     private void addEleToList(SubExp exp, List<SubExp> list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getSubExp().equals(exp.getSubExp())) {
@@ -131,6 +164,12 @@ public class RegularExp {
         list.add(exp);
     }
     
+    /**
+     * This method is used to initialize the character tree.
+     * 
+     * @param cs - a character array
+     * @return mapping from character name to character tree.
+     */
     private Map<String, Tree> initializeCharTree(char[] cs) {
         Map<String, Tree> map = new HashMap<>();
         for (int i = 0; i < cs.length; i++) {
